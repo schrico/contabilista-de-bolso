@@ -62,13 +62,24 @@ chaos/    wrappers de falhas injetadas, desligados por defeito
 db/       migrações Alembic
 infra/    Docker, VPS e Azure
 web/      frontend Next.js (Bloco 2)
+ferramentas/  ferramentas do repositório (verificador de NIF e IBAN do pre-commit e do CI)
+tests/    testes pytest
 dados/    privado: no .gitignore, nunca versionado
 docs/     plano.md: cópia do plano (no .gitignore)
 ```
 
 ## Comandos
 
-A preencher quando o esqueleto existir (por exemplo `uv sync`, `uv run pytest`, `uv run ruff check .`, `pre-commit run --all-files`, `docker compose up -d db`).
+```sh
+uv sync                                   # instala o Python 3.13 e as dependências
+uv run pytest                             # testes
+uv run ruff check . && uv run ruff format --check .
+uv run pre-commit install                 # uma vez por clone: gitleaks + verificador de NIF/IBAN
+uv run pre-commit run --all-files
+uv run python -m ferramentas.verificar_dados_pessoais --todos   # o mesmo verificador que corre no CI
+```
+
+O CI (`.github/workflows/verificacoes.yml`) corre ruff, pytest, o verificador com `--todos` e o gitleaks sobre o histórico todo. Uma linha que tenha mesmo de levar um NIF ou IBAN público (por exemplo o de uma entidade) leva o marcador `dados-pessoais: permitido`. Por fazer: `docker compose up -d db` (Fase 4).
 
 ## Como trabalhar
 

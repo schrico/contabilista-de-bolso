@@ -1,0 +1,16 @@
+# Instalar uma vez por clone:  uv run pre-commit install
+# Correr sobre tudo:           uv run pre-commit run --all-files
+# O hook local pode ser saltado com --no-verify; por isso o CI corre as mesmas verificações.
+repos:
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.30.1
+    hooks:
+      - id: gitleaks
+
+  - repo: local
+    hooks:
+      - id: verificar-dados-pessoais
+        name: verificar NIF e IBAN
+        entry: python -m ferramentas.verificar_dados_pessoais
+        language: python
+        types: [text]
