@@ -1,5 +1,6 @@
 # Cópia local do plano, sincronizada a partir do doc (não é versionada)
 docs/plano.md
+docs/ruleset-main.json
 
 # Segredos: só no .env local (o .env.example é versionado e não tem valores)
 .env
