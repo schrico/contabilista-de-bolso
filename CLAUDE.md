@@ -22,7 +22,7 @@ Esse ficheiro é uma cópia do doc onde o plano é editado: não o alteres. Se a
 
 | # | Tema | Decisão |
 |---|---|---|
-| D1 | Base de dados | Postgres com pgvector na VPS (Hetzner), para registos e vetores |
+| D1 | Base de dados | Azure Database for PostgreSQL, Flexible Server B1ms com pgvector (grátis 12 meses com a free account, até ~nov 2027); a VPS fica como plano B (`pg_dump`/`pg_restore` e trocar a `DATABASE_URL`) |
 | D2 | Open-source e dados | Um só repositório público; dados pessoais só na base de dados e em pastas no `.gitignore` |
 | D3 | Licença | Apache-2.0 |
 | D4 | Corpus no repositório | Só os scripts de ingestão e os links, nunca os documentos |
@@ -37,13 +37,13 @@ Esse ficheiro é uma cópia do doc onde o plano é editado: não o alteres. Se a
 | D13 | Chaos monkey | Pontos de injeção desde o Bloco 0 e cenários em cada bloco |
 | D14 | Modelos | Comerciais e abertos lado a lado desde o Bloco 1, trocáveis por configuração |
 | D15 | Nome | Contabilista de Bolso |
-| D16 | Ligação Azure → base de dados | Rede privada com Tailscale: o Postgres só escuta no IP do Tailscale da VPS (nunca em `0.0.0.0`), `pg_hba.conf` só aceita `100.64.0.0/10` com `scram-sha-256`; na Azure o `tailscaled` corre em modo userspace com um reencaminhador local (`socat` + `tailscale nc`) para `localhost:5432`; ACL: só `tag:app` fala com `tag:db` na porta 5432 |
+| D16 | Ligação da app à base de dados | Rede privada (VNet): sub-rede delegada ao Postgres, sub-rede do ambiente da Container Apps e zona DNS privada; a base de dados não é acessível da internet nem do PC do autor; migrações e SQL à mão correm num Container Apps Job dentro da rede |
 
 ## Stack
 
 - Python 3.13 com uv; FastAPI; LangGraph; LiteLLM como biblioteca dentro da app (não como servidor)
 - Postgres com pgvector; migrações com Alembic
-- Tailscale entre a Azure e a VPS (D16)
+- Azure Database for PostgreSQL Flexible Server, com a configuração do plano grátis: B1ms, 32 GiB sem crescimento automático do disco, sem alta disponibilidade nem backup geo-redundante, um só servidor
 - pytest e ruff; pre-commit com gitleaks e um verificador próprio de NIF e IBAN (o mesmo verificador corre no CI)
 - Docker; GitHub Actions → GitHub Container Registry → Azure Container Apps (plano Consumption, OIDC sem passwords)
 - Langfuse Cloud (UE)
