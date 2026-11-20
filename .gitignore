@@ -1,0 +1,44 @@
+# Cópia local do plano, sincronizada a partir do doc (não é versionada)
+docs/plano.md
+
+# Segredos: só no .env local (o .env.example é versionado e não tem valores)
+.env
+.env.*
+!.env.example
+
+# Dados pessoais: faturas, casos reais, exports (D2)
+dados/
+
+# Dumps e cópias de segurança da base de dados
+*.dump
+*.pgdump
+*.backup
+*.sql.gz
+*.sql.gpg
+*.sql.age
+backups/
+
+# Certificados e chaves privadas
+*.pem
+*.key
+*.crt
+*.cer
+*.der
+*.csr
+*.p12
+*.pfx
+*.jks
+
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+build/
+dist/
+
+# Node / Next.js (Bloco 2)
+node_modules/
+.next/
